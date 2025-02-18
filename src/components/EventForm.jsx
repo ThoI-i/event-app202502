@@ -1,6 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import styles from './EventForm.module.scss';
 
 const EventForm = () => {
+
+  // 링크 이동시 새로고침 없이 이동하는 훅
+  const navigate = useNavigate();
 
   // 서버로 데이터 보내기
   const handleSubmit = e => { 
@@ -16,7 +20,25 @@ const EventForm = () => {
       imageUrl: formData.get('image'),
       beginDate: formData.get('date')
     };
-    console.log(payload);
+    // console.log(payload);
+
+    // 서버로 페칭
+    const fetchPost = async () => { 
+      const response = await fetch(`http://localhost:9000/api/events`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        // window.location.href = '/events';
+        navigate('/events');
+      }
+    };
+
+    fetchPost();
     
     
   };
