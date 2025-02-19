@@ -89,7 +89,7 @@ const EventForm = () => {
         />
       </p>
       <div className={styles.actions}>
-        <button type='button'>Cancel</button>
+        <button type='button' onClick={() => navigate('..')}>Cancel</button>
         <button>Save</button>
       </div>
     </Form>
