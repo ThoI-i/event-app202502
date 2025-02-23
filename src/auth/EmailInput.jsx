@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from 'react';
 import styles from './SignUpForm.module.scss';
 import { AUTH_API_URL } from '../../config/host-config';
@@ -54,7 +53,7 @@ const EmailInput = ({ onSuccess }) => {
         ref={emailRef}
         type='email'
         placeholder='Enter your email'
-        onChange={debounce(handleEmail, 1200)}
+        onChange={debounce(handleEmail, 700)}
         className={error ? styles.invalidInput : ''}
       />
       {error && <p className={styles.errorMessage}>{error}</p>}
