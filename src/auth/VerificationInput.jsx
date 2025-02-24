@@ -4,7 +4,6 @@ import { debounce } from 'lodash';
 import { AUTH_API_URL } from '../../config/host-config';
 
 const VerificationInput = ({ email }) => {
-
   const inputsRef = useRef([]);
 
   // 입력한 인증코드 숫자값을 관리
@@ -12,6 +11,9 @@ const VerificationInput = ({ email }) => {
 
   // 에러 메시지
   const [error, setError] = useState('');
+
+  // 타이머 시간을 상태관리
+  const [timer, setTimer] = useState(300);
 
   // input태그들을 ref에 바인딩
   const bindInputRef = ($input, index) => {
@@ -39,6 +41,8 @@ const VerificationInput = ({ email }) => {
 
     // 검증에 실패했을 때
     if (!isMatch) {
+      // 타이머 리셋
+      setTimer(300);
       // 에러 메시지 세팅
       setError('유효하지 않거나 만료된 인증코드입니다. 인증코드를 재발송합니다.');
       // 인증코드 모두 지우기
@@ -57,8 +61,6 @@ const VerificationInput = ({ email }) => {
 
   // 입력이벤트
   const handleNumber = (e, index) => {
-
-
     const inputValue = e.target.value;
 
     // 빈 문자열(삭제)은 허용하고, 입력값이 한 자리 숫자가 아니면 무시
@@ -85,7 +87,7 @@ const VerificationInput = ({ email }) => {
 
       // 서버로 검증 요청보내기
       fetchVerifying(email, verifyCode);
-      
+
     }
   };
 
@@ -98,12 +100,20 @@ const VerificationInput = ({ email }) => {
   //   }
   // }, [codes]);
 
-  // 초기 렌더링시 첫번째 input에 포커싱
+  // 초기 렌더링시 타이머 시작 및 첫번째 input에 포커싱
   useEffect(() => {
+
+    // 타이머 설정 - 1초마다 타이머시간을 리렌더링
+    const id = setInterval(() => { 
+      setTimer(prev => prev > 0 ? prev - 1 : 0);
+    }, 1000);
+
+
     inputsRef.current[0].focus();
     // console.log(codes.join(''));
-  }, []);
 
+    return () => clearInterval(id); 
+  }, []);
 
   return (
     <>
@@ -121,7 +131,10 @@ const VerificationInput = ({ email }) => {
           />
         ))}
       </div>
-      {error && <p className={styles.errorMessage}>{ error }</p> }
+      <div className={styles.timer}>
+        {`${'0' + Math.floor(timer / 60)}:${('0' + (timer % 60)).slice(-2)}`}
+      </div>
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </>
   );
 };
