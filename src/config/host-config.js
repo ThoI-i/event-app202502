@@ -16,8 +16,9 @@ let backendHostName;
 
 if (clientHostName === 'localhost') {
   backendHostName = `http://localhost:${LOCAL_PORT}`;
-} else if (clientHostName === 'www.strawberry.co.kr') {
-  backendHostName = `https://api.fruits.com`;
+} else if (clientHostName === 
+  'http://my-event-app-buckeck-theo.s3-website.ap-northeast-2.amazonaws.com/') {
+  backendHostName = `https:/15.164.16.168:9000`;
 }
 
 // 기본 백엔드 주소 저장
